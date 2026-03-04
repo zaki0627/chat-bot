@@ -1,14 +1,29 @@
-import { HiOutlineArrowRightOnRectangle } from 'react-icons/hi2';
-import ConversationList from './ConversationList';
+import { HiOutlineArrowRightOnRectangle } from "react-icons/hi2";
+import ConversationList from "./ConversationList";
+import { conversationRepository } from "../../modules/conversations/conversation.repository";
+import { useAtom } from "jotai";
+import { conversationsAtom } from "../../modules/conversations/conversation.state";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+  const [conversations, setConversations] = useAtom(conversationsAtom);
+  const createConversation = async () => {
+    try {
+      const conversation = await conversationRepository.create();
+      setConversations([conversation, ...conversations]);
+      navigate(`/chats/${conversation.id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="sidebar">
-      <div style={{ padding: '16px' }}>
+      <div style={{ padding: "16px" }}>
         <button
           className="btn-primary"
-          style={{ width: '100%' }}
-          onClick={() => {}}
+          style={{ width: "100%" }}
+          onClick={createConversation}
         >
           + 新規チャット
         </button>
@@ -17,17 +32,17 @@ export default function Sidebar() {
 
       <div
         style={{
-          padding: '16px',
-          marginTop: 'auto',
-          borderTop: '1px solid #E5E5E5',
+          padding: "16px",
+          marginTop: "auto",
+          borderTop: "1px solid #E5E5E5",
         }}
       >
         <button
           className="sidebar-item"
           style={{
-            width: '100%',
-            border: 'none',
-            background: 'transparent',
+            width: "100%",
+            border: "none",
+            background: "transparent",
             margin: 0,
           }}
           onClick={() => {}}
