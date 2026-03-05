@@ -1,13 +1,15 @@
 import { HiOutlineArrowRightOnRectangle } from "react-icons/hi2";
 import ConversationList from "./ConversationList";
 import { conversationRepository } from "../../modules/conversations/conversation.repository";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { conversationsAtom } from "../../modules/conversations/conversation.state";
 import { useNavigate } from "react-router-dom";
+import { currentUserAtom } from "../../modules/auth/current-user.state";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const [conversations, setConversations] = useAtom(conversationsAtom);
+  const setCurrentUser = useSetAtom(currentUserAtom);
   const createConversation = async () => {
     try {
       const conversation = await conversationRepository.create();
@@ -16,6 +18,10 @@ export default function Sidebar() {
     } catch (error) {
       console.log(error);
     }
+  };
+  const logout = () => {
+    localStorage.removeItem("token");
+    setCurrentUser(undefined);
   };
   return (
     <div className="sidebar">
@@ -45,7 +51,7 @@ export default function Sidebar() {
             background: "transparent",
             margin: 0,
           }}
-          onClick={() => {}}
+          onClick={logout}
         >
           <HiOutlineArrowRightOnRectangle size={20} />
           <span>ログアウト</span>

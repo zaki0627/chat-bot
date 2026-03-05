@@ -6,7 +6,7 @@ import { currentUserAtom } from "../../modules/auth/current-user.state";
 
 export default function Chat() {
   const currentUser = useAtomValue(currentUserAtom);
-  if (currentUser) <Navigate to="/signin" />;
+  if (!currentUser) return <Navigate to="/signin" />;
   return (
     <div className="chat-layout">
       <Sidebar />
